@@ -502,39 +502,37 @@ function fusion.cl.Menu.SelectRank( rank, panel )
 	end
 end
 
-fusion.cl.Menu.Pages[3] = { 
-	Name = "Logs",	
-	Condition = function() return fusion.LogFiles end,
-	Function = function(panel)
+-- fusion.cl.Menu.Pages[3] = { 
+	-- Name = "Logs",	
+	-- Condition = function() return fusion.LogFiles end,
+	-- Function = function(panel)
 
-		-- if fusion.LogFiles then
-
-		local tbl = vgui.Create( "DListView" )
-		tbl:SetSize(panel:GetWide() - 4, 100)
-		tbl:SetMultiSelect(false)		
+		-- local tbl = vgui.Create( "DListView" )
+		-- tbl:SetSize(panel:GetWide() - 4, 100)
+		-- tbl:SetMultiSelect(false)		
 		
-		fusion.cl.Menu.LogPage = vgui.Create("DListView")
-		fusion.cl.Menu.LogPage:SetSize(panel:GetWide() - 10, panel:GetTall() - 106)
-		fusion.cl.Menu.LogPage:SetMultiSelect(false)
-		fusion.cl.Menu.LogPage:AddColumn("Log")			
+		-- fusion.cl.Menu.LogPage = vgui.Create("DListView")
+		-- fusion.cl.Menu.LogPage:SetSize(panel:GetWide() - 10, panel:GetTall() - 106)
+		-- fusion.cl.Menu.LogPage:SetMultiSelect(false)
+		-- fusion.cl.Menu.LogPage:AddColumn("Log")			
 		
-		table.SortByMember( fusion.LogFiles, 1, function(a, b) return a > b end )
+		-- table.SortByMember( fusion.LogFiles, 1, function(a, b) return a > b end )
 		
-		for i=1, #fusion.LogFiles do
-			local line = tbl:AddLine( "fusion/logs/" .. fusion.LogFiles[i] )
-			line.OnMouseReleased = function()
-				if tbl:GetSelectedItems() and tbl:GetSelectedItems()[1] then
-					fusion.cl.Menu.LogPage:Clear()
-					RunConsoleCommand( "fusion_cl_requestlog", tbl:GetSelectedItems()[1]:GetValue() )
-				end
-			end		
-		end
+		-- for i=1, #fusion.LogFiles do
+			-- local line = tbl:AddLine( "fusion/logs/" .. fusion.LogFiles[i] )
+			-- line.OnMouseReleased = function()
+				-- if tbl:GetSelectedItems() and tbl:GetSelectedItems()[1] then
+					-- fusion.cl.Menu.LogPage:Clear()
+					-- RunConsoleCommand( "fusion_cl_requestlog", tbl:GetSelectedItems()[1]:GetValue() )
+				-- end
+			-- end		
+		-- end
 		
-		panel:AddItem( tbl )
-		panel:AddItem( fusion.cl.Menu.LogPage )		
+		-- panel:AddItem( tbl )
+		-- panel:AddItem( fusion.cl.Menu.LogPage )		
 		
-	end 
-}
+	-- end 
+-- }
 
 -- datastream.Hook( "fusion_menu-logpage", function( handler, id, encoded, decoded )
 net.Receive( "fusion_menu-logpage", function( data )

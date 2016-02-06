@@ -432,7 +432,7 @@ if enabled then
 						
 					-- print(chat.icon)
 						
-					local str_tbl = chatbox.WordWrap((chat.prefix or "") .. name_str .. sep .. chat.text, w - 5, " ", chat.icon)	//120	
+					local str_tbl = chatbox.WordWrap((chat.prefix or "") .. name_str .. sep .. chat.text, w - 5, " ", true)	//120	
 					
 					
 					
@@ -497,10 +497,11 @@ if enabled then
 								if chat.icon == "" then chat.icon = nil end
 								
 								local prev_w = 5
-								if chat.icon then								
+								-- if chat.icon then								
 									prev_w = prev_w + 18
-								end
+								-- end
 								
+
 								
 								local x, y = x, line_y + 10 - 20 * (#str_tbl-j)	-1					
 								
@@ -516,6 +517,17 @@ if enabled then
 										-- draw.SimpleText(chat.prefix, "chatbox_Font", x + prev_w, y, chat.colour or colour or Color(230,230,230,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)	
 										-- draw.SimpleText(chat.name, "chatbox_Font_Blur", x + prev_w, y, chat.nameColour, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)	
 										//prev_w = prev_w + w
+									end
+									
+									if !fusion.cl.cachedicons then fusion.cl.cachedicons = {} end
+									local mat = "icon16/bullet_white.png"
+									
+									if !fusion.cl.cachedicons[mat] then
+										fusion.cl.cachedicons[mat] = Material("icon16/bullet_white.png")
+									else
+										surface.SetDrawColor(chat.nameColour or chat.colour or Color(230,230,230,255))
+										surface.SetMaterial(fusion.cl.cachedicons[mat])
+										surface.DrawTexturedRect(x +4, y-7, 16, 16)
 									end
 						
 									if chat.name and (word == name_str) and chat.nameColour then				
@@ -547,11 +559,10 @@ if enabled then
 											if !fusion.cl.cachedicons[chat.icon] then
 												fusion.cl.cachedicons[chat.icon] = Material("icon16/" .. chat.icon)
 											else
-												surface.SetDrawColor(Color(255,255,255.255))
+												surface.SetDrawColor(Color(255,255,255,255))
 												surface.SetMaterial(fusion.cl.cachedicons[chat.icon])
 												surface.DrawTexturedRect(x +4, y-7, 16, 16)
 											end
-											
 										end
 									end
 									
