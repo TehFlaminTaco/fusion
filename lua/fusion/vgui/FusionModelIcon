@@ -1,0 +1,90 @@
+
+local PANEL = {}
+
+AccessorFunc( PANEL, "m_iIconSize", 		"IconSize" )
+
+/*---------------------------------------------------------
+   Name: Paint
+---------------------------------------------------------*/
+function PANEL:Init()
+
+	-- self.Icon = vgui.Create( "ModelImage", self )
+	-- self.Icon:SetMouseInputEnabled( false )
+	-- self.Icon:SetKeyboardInputEnabled( false )
+	
+	self.PaintOver = self.PaintOverNormal
+	
+	-- self.Icon.Paint = function() end
+	-- self.Icon.PaintOver = function() end
+	
+	-- self.animPress = Derma_Anim( "Press", self, self.PressedAnim )
+	
+	self:SetIconSize( 64 ) // Todo: Cookie!
+
+end
+
+/*---------------------------------------------------------
+   Name: OnMousePressed
+---------------------------------------------------------*/
+function PANEL:OnMousePressed( mcode )
+
+	if ( mcode == MOUSE_LEFT ) then
+		self:DoClick()
+		-- self.animPress:Start( 0.2 )
+	end
+	
+	if ( mcode == MOUSE_RIGHT ) then
+		self:OpenMenu()
+	end
+
+end
+
+function PANEL:OnMouseReleased()
+
+end
+
+function PANEL:DoClick()
+end
+
+function PANEL:OpenMenu()
+end
+
+function PANEL:OnCursorEntered()
+	self.PaintOver = self.PaintOverHovered
+end
+
+function PANEL:OnCursorExited()
+	self.PaintOver = self.PaintOverNormal
+end
+
+function PANEL:PaintOverNormal()
+	draw.RoundedBox( 0, 0, 0, self:GetWide(), self:GetTall(), Color(0,0,0,150) )	
+end
+
+function PANEL:PaintOverHovered()
+
+end
+
+function PANEL:PerformLayout()
+
+	self:SetSize( self.m_iIconSize, self.m_iIconSize )	
+	-- self.Icon:StretchToParent( 0, 0, 0, 0 )
+
+end
+
+-- function PANEL:SetModel( mdl, iSkin )
+
+	-- if (!mdl) then debug.Trace() return end
+
+	-- self.Icon:SetModel( mdl, iSkin )
+-- end
+
+
+-- function PANEL:RebuildSpawnIcon()
+
+	-- self.Icon:RebuildSpawnIcon()
+
+-- end
+
+
+vgui.Register( "FusionModelIcon", PANEL, "Panel" )

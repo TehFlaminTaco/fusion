@@ -1,0 +1,44 @@
+if SERVER then
+	fusion.Spells = {}
+	fusion.Spells["radius solis"] = function(ply)
+		local trace = ply:GetEyeTrace()
+		
+		if trace.Hit then
+			local target = trace.HitPos
+			
+			local shootpos = ply:GetShootPos()
+			local ang = ply:EyeAngles()
+			
+			local p = ents.Create("prop_physics")
+			P:SetModel(
+			p:SetPos(shootpos)
+			
+			
+		end
+	end
+	fusion.Spells["drokus pokus smokus"] = function(ply)
+	
+	end
+	
+	fusion.commands["magic"] = {
+		Name = "Magic",	
+		Hierarchy = 0,
+		Category = "magic",
+		Args = 1,
+		Condition = function(ply, v) return !v.Jailed end,
+		Help = "Anything is possible.",
+		Function = function( ply, cmd, args )
+			local message = fusion.commands[cmd].Message
+			local spell = string.Implode(" ", args)
+			
+			if fusion.Spells[spell] then
+				fusion.Spells[spell](ply)
+			else
+				fusion.Message( ply, "Nothing seems to happen." )	
+			end
+		end	
+	}
+else // elseif client
+
+
+end

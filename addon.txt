@@ -1,0 +1,12 @@
+"AddonInfo"
+{
+	"name"		"Inervate Admin Mod"
+	"version"	""
+	"up_date"	""
+	"author_name"	""
+	"author_email"	""
+
+	"info"		""
+
+	"override"	"0"
+}
