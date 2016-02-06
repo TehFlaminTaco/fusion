@@ -40,7 +40,9 @@ if SERVER then
 			
 			fusion.SendAnnouncement( 30, random)
 			
-		end	
+		else
+			file.Write("fusion/announcements.txt", "", "DATA")
+		end
 	
 	end
 	
