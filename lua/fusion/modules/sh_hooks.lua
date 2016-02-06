@@ -444,7 +444,7 @@ hook.Add("Move", "fusion_move", function( ply, mv )
 			end
 			
 			bounce = true
-		elseif isTowed and dist > 200 and parentVel > 0 then
+		elseif isTowed and dist > 200 then
 			speed = speed + (style_data.HookSpeed * 0.07 * math.min(1, (dist-500)/1000))
 			bounce = true
 		end

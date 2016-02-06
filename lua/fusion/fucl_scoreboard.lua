@@ -2010,27 +2010,27 @@ local styles = {
 	}
 
 local settings = {
-	{
-		OnClick = function()
-			if fusion.cl.shopActive then
-				fusion.cl.shopActive = false
-			else 
-				fusion.cl.openShop()
-				scoreboard_up = false
-			end
-		end,
-		GetName = function()
-			if fusion.cl.shopActive then
-				return "Close Shop"
-			else
-				return "Open Shop"
-			end
-		end,
-		Icon = Material("icon16/coins.png"),
-		Colour = Color(255, 255, 0),
-		Initialize = function()	end,
-		IsActive = function() return fusion.cl.shopActive end
-	},
+	-- {
+		-- OnClick = function()
+			-- if fusion.cl.shopActive then
+				-- fusion.cl.shopActive = false
+			-- else 
+				-- fusion.cl.openShop()
+				-- scoreboard_up = false
+			-- end
+		-- end,
+		-- GetName = function()
+			-- if fusion.cl.shopActive then
+				-- return "Close Shop"
+			-- else
+				-- return "Open Shop"
+			-- end
+		-- end,
+		-- Icon = Material("icon16/coins.png"),
+		-- Colour = Color(255, 255, 0),
+		-- Initialize = function()	end,
+		-- IsActive = function() return fusion.cl.shopActive end
+	-- },
 	
 	{
 		OnClick = function()
