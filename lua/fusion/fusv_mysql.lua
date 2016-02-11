@@ -1,19 +1,19 @@
 require( "mysqloo" )
 
-local queue = {} 
+local queue = {}
 
 local mysql_data = {}
 
 local mysqlfile = "fusion/mysql.txt"
 
-if file.Exists( mysqlfile, "DATA" ) then			
-	mysql_data = string.Explode( ",", file.Read( mysqlfile, "DATA" ) )	
-	
+if file.Exists( mysqlfile, "DATA" ) then
+	mysql_data = string.Explode( ",", file.Read( mysqlfile, "DATA" ) )
+
 	print("Fusion: MySQL data file loaded.")
 else
-	mysql_data = {"address", "user", "password", "database"}	
-	file.Write(mysqlfile, string.Implode(",", mysql_data), "DATA")	
-end	
+	mysql_data = {"address", "user", "password", "database"}
+	file.Write(mysqlfile, string.Implode(",", mysql_data), "DATA")
+end
 
 local host = mysql_data[1]
 local user = mysql_data[2]
@@ -23,35 +23,35 @@ local database = mysql_data[4]
 -- PrintTable(mysql_data)
 -- print(mysql_data[1], mysql_data[2], mysql_data[3], mysql_data[4])
 
-	 
+
 local db = mysqloo.connect(host, user, password, database, 3306 )
 
 function db:onConnected()
 	// runQuery("CREATE TABLE IF NOT EXISTS Users(PersonID int,LastName varchar(255),FirstName varchar(255),Address varchar(255),City varchar(255))")
-	
+
 	for k, v in pairs( queue ) do
 		runQuery( v[1], v[2] )
 	end
 	queue = {}
-	
+
 	print("Fusion: Connection to database successful!")
-	
+
 	fusion.sv.RetrieveBans()
-	
+
 	-- timer.Simple(5, function()
 		-- for k,v in pairs(player.GetAll()) do
 			-- fusion.sv.InitializePlayerData(v)
 		-- end
 	-- end)
 end
- 
+
 function db:onConnectionFailed( err )
- 
+
     print( "Fusion: Connection to database failed!" )
     print( "Fusion: Error - ", err )
- 
+
 end
- 
+
 db:connect()
 
 fusion.DB = db
@@ -59,24 +59,24 @@ fusion.DB = db
 function runQuery(sql, callback)
 
 	local q = db:query(sql)
-	
+
 	if !q then
 		table.insert( queue, { sql, callback } )
 		db:connect()
 		print("Fusion: Query errored, nil query?")
 		return
 	end
-	
+
 	function q:onSuccess( data )
-		if callback then		
+		if callback then
 			if data and table.Count(data) > 0 then
 				callback(data)
 			else
-				callback({})	
+				callback({})
 			end
 		end
-	end		
-	
+	end
+
 	function q:onError( data )
 		if db:status() == mysqloo.DATABASE_NOT_CONNECTED then
 
@@ -89,19 +89,19 @@ function runQuery(sql, callback)
 	end
 
 	q:start()
-	
+
 	-- local data = sql.Query(query)
 	-- local err = sql.LastError()
-	
+
 	-- if err then
 		-- print( "Query Errored, error:", err, " sql: ", sql )
 	-- else
-		-- if data then 
+		-- if data then
 			-- PrintTable(data)
 			-- callback(data)
 		-- end
-		
-	-- end	
+
+	-- end
 
 end
 
@@ -115,11 +115,11 @@ function fusion.sv.SetData( ply, var, data )
 	local id = tostring( ply:SteamID() )
 	local evar = db:escape( var )
 	local edata = db:escape( tostring(data) )
-	
+
 	-- print(evar)
-	
+
 	runQuery("INSERT INTO Users (ID, " .. evar .. ") VALUES ('"..id.."', '"..edata.."') ON DUPLICATE KEY UPDATE " .. evar .. " = '"..edata.."'")
-				
+
 end
 
 function fusion.sv.RemoveData( ply, var )
@@ -131,60 +131,64 @@ end
 
 function fusion.sv.RetrieveData( ply, callback )
 	local id = tostring( ply:SteamID() )
-	id = db:escape( id )	
+	id = db:escape( id )
 
-	runQuery("SELECT * FROM Users WHERE ID = '" .. id .. "'", callback)	
+	runQuery("SELECT * FROM Users WHERE ID = '" .. id .. "'", callback)
 end
 
 function fusion.sv.RetrieveBans()
 	fusion.Bans = {}
-	
-	runQuery("SELECT * FROM Fusion_Bans", function(data)	
-		
+
+	runQuery("SELECT * FROM Fusion_Bans", function(data)
+
 		print(table.Count(data) .. " players banned.")
-	
+
 		for k,v in pairs( data ) do
-			
+
 			local id = v["ID"]
 			local name = v["Name"]
 			local banner = v["Banner"]
 			local desc = v["Description"]
-			local unban = tonumber(v["Unban"]) or 0				
-			
+			local unban = tonumber(v["Unban"]) or 0
+
 			fusion.Bans[id] = { Name = name, Banner = banner, Description = desc, Unban = unban }
-		
+
 			if (unban > 0) then
-				local remaining = unban - os.date(os.time())				
-				if remaining < 0 then	
+				local remaining = unban - os.date(os.time())
+				if remaining < 0 then
 					fusion.sv.RemoveBan(id)
 				end
 			end
 		end
-		
-		fusion.sv.SendBans()	
+
+		fusion.sv.SendBans()
 	end)
-	
-end	
+
+end
 
 function fusion.sv.AddBan( id, name, banner, desc, unban )
-	if !fusion.Bans then fusion.Bans = {} end		
+	if !fusion.Bans then fusion.Bans = {} end
 	if tonumber(unban) == nil then return end
-	if string.find( id, "STEAM_%d:%d:%d+" ) then 
+	if string.find( id, "STEAM_%d:%d:%d+" ) then
 		if tonumber( unban ) > 0 then
 			unban = os.date( os.time() ) + tonumber( unban )
 		else
 			unban = 0
 		end
+
+		name = db:escape( name )
+		banner = db:escape( banner )
+		desc = db:escape( desc )
 		fusion.Bans[id] = { Name = name, Banner = banner, Description = desc, Unban = unban }
-		
-		runQuery("INSERT INTO Fusion_Bans (ID, Name, Banner, Description, Unban) VALUES ('"..id.."', '"..name.."', '"..banner.."', '"..desc.."', '"..unban.."') ON DUPLICATE KEY UPDATE Unban = '"..unban.."'", function() fusion.sv.SendBans() print("Ban deleted.") end)
-	end	
+
+		runQuery("INSERT INTO Fusion_Bans (ID, Name, Banner, Description, Unban) VALUES ('"..id.."', '"..name.."', '"..banner.."', '"..desc.."', '"..unban.."') ON DUPLICATE KEY UPDATE Unban = '"..unban.."'", function() fusion.sv.SendBans() print("Ban added.") end)
+	end
 end
 
 function fusion.sv.RemoveBan( id )
-	if !fusion.Bans then return end		
-	if string.find( id, "STEAM_%d:%d:%d+" ) then 	
+	if !fusion.Bans then return end
+	if string.find( id, "STEAM_%d:%d:%d+" ) then
 		fusion.Bans[id] = nil
-		runQuery("DELETE FROM Fusion_Bans WHERE ID = '" .. id .. "'", function() fusion.sv.SendBans() print("Ban deleted.") end)		
-	end		
+		runQuery("DELETE FROM Fusion_Bans WHERE ID = '" .. id .. "'", function() fusion.sv.SendBans() print("Ban deleted.") end)
+	end
 end
