@@ -485,7 +485,7 @@ if enabled then
 											
 											surface.PlaySound("friends/friend_join.wav")
 											
-											chatbox.SetTimedText(1, Vector(area_pos.x + 15, area_pos.y + 10, 0),  "Copied '"..text.."'", fusion.cl.DefaultColour(255), 0.5)
+											chatbox.SetTimedText(1, Vector(area_pos.x + 15, area_pos.y + 10, 0),  "Copied '"..text.."'", Color(255,150,50), 0.5)
 										end
 									end
 									
@@ -519,15 +519,17 @@ if enabled then
 										//prev_w = prev_w + w
 									end
 									
-									if !fusion.cl.cachedicons then fusion.cl.cachedicons = {} end
-									local mat = "icon16/bullet_white.png"
-									
-									if !fusion.cl.cachedicons[mat] then
-										fusion.cl.cachedicons[mat] = Material("icon16/bullet_white.png")
-									else
-										surface.SetDrawColor(chat.nameColour or chat.colour or Color(230,230,230,255))
-										surface.SetMaterial(fusion.cl.cachedicons[mat])
-										surface.DrawTexturedRect(x +4, y-7, 16, 16)
+									if !chat.icon then
+										if !fusion.cl.cachedicons then fusion.cl.cachedicons = {} end
+										local mat = "icon16/bullet_white.png"
+										
+										if !fusion.cl.cachedicons[mat] then
+											fusion.cl.cachedicons[mat] = Material("icon16/bullet_white.png")
+										else
+											surface.SetDrawColor(chat.nameColour or chat.colour or Color(230,230,230,255))
+											surface.SetMaterial(fusion.cl.cachedicons[mat])
+											surface.DrawTexturedRect(x +4, y-7, 16, 16)
+										end
 									end
 						
 									if chat.name and (word == name_str) and chat.nameColour then				
@@ -559,6 +561,7 @@ if enabled then
 											if !fusion.cl.cachedicons[chat.icon] then
 												fusion.cl.cachedicons[chat.icon] = Material("icon16/" .. chat.icon)
 											else
+								
 												surface.SetDrawColor(Color(255,255,255,255))
 												surface.SetMaterial(fusion.cl.cachedicons[chat.icon])
 												surface.DrawTexturedRect(x +4, y-7, 16, 16)
@@ -615,8 +618,9 @@ if enabled then
 												
 												 
 												
-												chatbox.SetTimedText(1, Vector(area_pos.x + 15, area_pos.y + 10, 0),  "Copied '"..word.."'", fusion.cl.DefaultColour(255), 0.5)
+												chatbox.SetTimedText(1, Vector(area_pos.x + 15, area_pos.y + 10, 0),  "Copied '"..word.."'", Color(255,150,50), 0.5)
 											end
+
 										end
 										
 										draw.SimpleText(word, "chatbox_Font_Blur", x + prev_w, y, glowy, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)

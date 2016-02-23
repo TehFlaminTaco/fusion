@@ -1,0 +1,4 @@
+people being godded on first spawn?
+move voting and menu panels in scoreboard to not overlap
+Crona: I need to annoy droke enough to add a prop counter to tab menu
+restore spawn logging in console

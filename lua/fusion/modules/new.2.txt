@@ -1,0 +1,4 @@
+models/props_combine/combine_train001
+models/props_pipes/GutterMetal01a
+models/props_lab/door_klab01
+models/props/cs_assault/pylon

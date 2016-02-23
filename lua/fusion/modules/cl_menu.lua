@@ -551,7 +551,7 @@ net.Receive( "fusion_menu-logpage", function( data )
 
 end )
 
-fusion.cl.Menu.Pages[4] = { 
+fusion.cl.Menu.Pages[3] = { 
 	Name = "Maps",	
 	Condition = function() return true end,
 	Function = function(panel)
