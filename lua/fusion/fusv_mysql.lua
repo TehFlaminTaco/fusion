@@ -77,7 +77,7 @@ function runQuery(sql, callback)
 		end
 	end
 
-	function q:onError( data )
+	function q:onError( err, sql )
 		if db:status() == mysqloo.DATABASE_NOT_CONNECTED then
 
 			table.insert( queue, { sql, callback } )
