@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `fusion_bans` (
-  `ID` varchar(20) NOT NULL,
+  `ID` varchar(20) NOT NULL PRIMARY KEY,
   `Name` text,
   `Banner` text,
   `Description` text,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `fusion_bans` (
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `ID` varchar(64) NOT NULL,
+  `ID` varchar(64) NOT NULL PRIMARY KEY,
   `name` varchar(64) DEFAULT NULL,
   `rank` varchar(64) DEFAULT NULL,
   `sudo` varchar(64) DEFAULT NULL,
